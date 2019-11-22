@@ -42,7 +42,7 @@ jenjen [-h|-help|-t|-skip=..|-template=..|-dst=..|-dl=..|-dr=..] [directives] [-
 	The format of a directive is [context:]search=>replace
 	Where search is a case sensitive string matching a type name existing within ast.Ident nodes of the template package.
 	Where replace is a valid string value for an ast.Ident node,
-  or a dash (-) to signify deletion of the node if it is a function, a method or a type.
+	or a dash (-) to signify deletion of the node if it is a function, a method or a type.
 	If replace is a fully qualified type path (package/path.type),
 	the package path and its type component are identified,
 	the package path will be added to the import lists.
