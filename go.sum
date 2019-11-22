@@ -1,5 +1,3 @@
-github.com/fatih/astrewrite v0.0.0-20190527122930-f5295d6854fb h1:qzMLs39qKQl6FKU/yNIDKSPrfV56il5U24BX2NvRrxE=
-github.com/fatih/astrewrite v0.0.0-20190527122930-f5295d6854fb/go.mod h1:Q9oPjZxY7Z0tvrD5KtBTVLiSwATtmhafFD/Lb0fyzOk=
 github.com/gobwas/glob v0.2.3 h1:A4xDbljILXROh+kObIiy5kIaPYD8e96x1tgBhUI5J+Y=
 github.com/gobwas/glob v0.2.3/go.mod h1:d3Ez4x06l9bZtSvzIay5+Yzi0fmZzPgnTbPcKjJAkT8=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

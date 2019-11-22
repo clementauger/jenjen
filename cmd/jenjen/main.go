@@ -14,7 +14,6 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/fatih/astrewrite"
 	"github.com/gobwas/glob"
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/go/loader"
@@ -175,7 +174,7 @@ func main() {
 			}
 
 			if dstPkgName != "" {
-				astrewrite.Walk(f, rewriteFile(f.Name.Name, dstPkgName))
+				f.Name.Name = dstPkgName
 			}
 		}
 	}
@@ -424,17 +423,5 @@ func rmNode(search string) func(*astutil.Cursor) bool {
 			}
 		}
 		return true
-	}
-}
-
-func rewriteFile(search, replace string) func(n ast.Node) (ast.Node, bool) {
-	return func(n ast.Node) (ast.Node, bool) {
-		if x, ok := n.(*ast.File); ok {
-			if x.Name.Name == search {
-				x.Name.Name = replace
-			}
-			return x, true
-		}
-		return n, true
 	}
 }
