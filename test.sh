@@ -11,7 +11,7 @@ function test() {
 
 TPL="github.com/clementauger/jenjen/_examples/mymap"
 
-test $TPL "int => string" "package undefined" # undefined when the cwd is not a go package.
+test $TPL "int => string" "package jenjen" # package name is the directory base when the cwd is not a go package.
 test $TPL "int => string" "// jenjen 0\.0\.0-dev"
 
 test $TPL "int => string" "Rm(k string)"
