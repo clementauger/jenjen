@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/printer"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -116,24 +118,12 @@ func main() {
 		cli += a + " "
 	}
 
-	dstPkgName := "undefined"
-	dstFp, err := filepath.Abs(dst)
+	var err error
+	dst, err = filepath.Abs(dst)
 	if err != nil {
 		log.Fatal(err)
 	}
-	{
-		var conf loader.Config
-		conf.FromArgs([]string{dst}, false)
-		prog, err := conf.Load()
-		if err != nil {
-			log.Println(err)
-		}
-		i := prog.InitialPackages()
-		if len(i) > 0 && len(i[0].Files) > 0 {
-			dstPkgName = i[0].Files[0].Name.Name
-			dstFp = prog.Fset.File(i[0].Files[0].Pos()).Name()
-		}
-	}
+	dstPkgName := getPkgName(dst)
 
 	var conf loader.Config
 	conf.ParserMode = parser.ParseComments
@@ -194,7 +184,7 @@ func main() {
 		if len(files) > 1 {
 			outfp = fmt.Sprintf("jenjen_%v_%v", tplPkgName, filepath.Base(fp))
 		}
-		outfp = filepath.Join(filepath.Dir(dstFp), outfp)
+		outfp = filepath.Join(filepath.Dir(dst), outfp)
 		if suffix != "" {
 			ext := filepath.Ext(outfp)
 			f := strings.TrimSuffix(outfp, ext)
@@ -259,6 +249,35 @@ func (l globs) MatchAny(s string) bool {
 		}
 	}
 	return false
+}
+
+func getPkgName(path string) (pkgName string) {
+	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if pkgName != "" {
+			return nil
+		}
+		if info.IsDir() {
+			return filepath.SkipDir
+		}
+		d, err := ioutil.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		sc := bufio.NewScanner(bytes.NewReader(d))
+		for sc.Scan() {
+			l := sc.Text()
+			if strings.HasPrefix(l, "package ") {
+				pkgName = l[len("package "):]
+				pkgName = strings.TrimSpace(pkgName)
+				return nil
+			}
+		}
+		return nil
+	})
+	if pkgName == "" {
+		pkgName = filepath.Base(path)
+	}
+	return
 }
 
 func selectFiles(prog *loader.Program, pkg *loader.PackageInfo, skips []string) []*ast.File {
