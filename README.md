@@ -146,3 +146,9 @@ func NewStrBytesMap() map[string][]byte {
 - support search of complex types like `map[K]V`
 - write tests.
 - maybe write it as a lib.
+
+## See also
+
+https://github.com/mmatczuk/go_generics
+
+Very much like `jenjen` it uses the official go parser, but it is definitely more mature.
